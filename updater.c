@@ -5,11 +5,6 @@
 
 #include "updater.h"
 
-/*
-tutti gli indirizzi devono già essere presenti con lunghezza 4
-
-*/
-
 const char *const MATCH_STRING = "R_addr=$";
 char *inputFileStr = "in.txt";
 char *outputFileStr = "out.txt";
@@ -47,6 +42,9 @@ int main(void)
 
             // aggiungo 0 all'inizio per avere lunghezza 4
             strp += MATCH_STRING_LEN;
+
+            fixNumberWidth(strp);
+
             for (int i = 0; i < 4; i++)
             {
                 if (i < 4 - tmpstr_len)
@@ -69,6 +67,16 @@ int main(void)
     getchar();
 
     return 0;
+}
+
+void fixNumberWidth(char *p)
+{
+    int count = 0;
+    while (isxdigit(p[count]))
+        count++;
+
+    if (count < 4)
+        memmove(p + (4 - count), p, strlen(p) + 1);
 }
 
 bool notCommented(const char *inputstr)
