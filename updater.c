@@ -28,7 +28,6 @@ int main(void)
     FILE *outFile = fopen(outputFileStr, "w");
 
     printf("input file: \"%s\"\noutput file: \"%s\"\n", inputFileStr, outputFileStr);
-    // printf("hr modbus register (default = 0x601): ");
     puts("start HR modbus address in HEX (default = 0x601):");
     int counting_index = 0x601;
     scanf("%x", &counting_index);
@@ -40,21 +39,21 @@ int main(void)
     while (fgets(line, sizeof line, inFile))
     {
         char *strp;
-        // puts(line);
-        // if ((strp = strstr(line, MATCH_STRING)) && (strncmp(line, "(*", 2) != 0))
         if ((strp = strstr(line, MATCH_STRING)) && notCommented(line))
         {
             // converto counting_index to string
             char tempstr[5];
             int tmpstr_len = sprintf(tempstr, "%X", counting_index++);
-            // aggiungo 0 all'inizio per avere lunghezza 4
-            char num_str[5] = {'0', '0', '0', '0', '0'};
-            num_str[4 - tmpstr_len] = '\0';
-            strcat(num_str, tempstr);
 
+            // aggiungo 0 all'inizio per avere lunghezza 4
             strp += MATCH_STRING_LEN;
-            for (int i = 0; i < 4; ++i)
-                strp[i] = num_str[i];
+            for (int i = 0; i < 4; i++)
+            {
+                if (i < 4 - tmpstr_len)
+                    *strp++ = '0';
+                else
+                    *strp++ = tempstr[i + tmpstr_len - 4];
+            }
         }
 
         fputs(line, outFile);
@@ -72,7 +71,7 @@ int main(void)
     return 0;
 }
 
-bool notCommented(char *inputstr)
+bool notCommented(const char *inputstr)
 {
     char *strp = strstr(inputstr, "(*");
     if (strp == NULL)
