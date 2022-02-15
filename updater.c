@@ -37,10 +37,11 @@ int main(void)
         // if ((strp = strstr(line, MATCH_STRING)) && (strncmp(line, "(*", 2) != 0))
         if ((strp = strstr(line, MATCH_STRING)) && notCommented(line))
         {
-            char num_str[5] = {'0', '0', '0', '0', '0'};
+            // converto counting_index to string con 0 all'inizio per renderlo lunghezza 4
             char tempstr[5];
-            sprintf(tempstr, "%X", counting_index++);
-            int tmpstr_len = strlen(tempstr);
+            int tmpstr_len = sprintf(tempstr, "%X", counting_index++);
+            // strlen(tempstr);
+            char num_str[5] = {'0', '0', '0', '0', '0'};
             num_str[4 - tmpstr_len] = '\0';
             strcat(num_str, tempstr);
 
