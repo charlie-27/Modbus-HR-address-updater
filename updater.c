@@ -25,11 +25,12 @@ int main(void)
     printf("input file: \"%s\"\noutput file: \"%s\"\n", inputFileStr, outputFileStr);
     puts("start HR modbus address in HEX (default = 0x601):");
     int counting_index = 0x601;
-    scanf("%x", &counting_index);
+    char line[MAX_LINE_LEN];
+    if (scanf("%x", &counting_index) == 0)
+        scanf("%s",line);
     getchar();
     const int first_address = counting_index;
 
-    char line[MAX_LINE_LEN];
 
     while (fgets(line, sizeof line, inFile))
     {
