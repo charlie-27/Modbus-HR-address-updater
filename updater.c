@@ -38,8 +38,8 @@ int main(void)
         if ((strp = strstr(line, MATCH_STRING)) && notCommented(line))
         {
             // converto counting_index to string
-            char tempstr[5];
-            int tmpstr_len = sprintf(tempstr, "%X", counting_index++);
+            char num_str[5];
+            int num_str_len = sprintf(num_str, "%X", counting_index++);
 
             // aggiungo 0 all'inizio per avere lunghezza 4
             strp += MATCH_STRING_LEN;
@@ -48,10 +48,10 @@ int main(void)
 
             for (int i = 0; i < 4; i++)
             {
-                if (i < 4 - tmpstr_len)
+                if (i < 4 - num_str_len)
                     *strp++ = '0';
                 else
-                    *strp++ = tempstr[i + tmpstr_len - 4];
+                    *strp++ = num_str[i + num_str_len - 4];
             }
         }
 
