@@ -2,15 +2,36 @@
 #include <string.h>
 #include <stdbool.h>
 #include <ctype.h>
+#include <stdlib.h>
 
-#include "updater.h"
+#define MAX_LINE_LEN 200
+
+bool notCommented(const char *);
+void fixNumberCustomWidth(char *, int);
 
 const char *const MATCH_STRING = "R_addr=$";
 char *inputFileStr = "in.txt";
 char *outputFileStr = "out.txt";
 
-int main(void)
+int main(int argc, char **argv)
 {
+    bool variable_output_width = false;
+    if (argc > 1)
+    {
+        if (!strcmp(argv[1], "v"))
+        {
+            variable_output_width = true;
+            puts("variable output address width!");
+        }
+    }
+    if (argc > 3)
+    {
+        inputFileStr = calloc(strlen(argv[2]) + 1, sizeof(char));
+        strcpy(inputFileStr, argv[2]);
+        outputFileStr = calloc(strlen(argv[3]) + 1, sizeof(char));
+        strcpy(outputFileStr, argv[3]);
+    }
+
     const int MATCH_STRING_LEN = strlen(MATCH_STRING);
 
     FILE *inFile = fopen(inputFileStr, "r");
@@ -40,14 +61,16 @@ int main(void)
             char num_str[5];
             int num_str_len = sprintf(num_str, "%X", counting_index++);
 
-            // aggiungo 0 all'inizio per avere lunghezza 4
             strp += MATCH_STRING_LEN;
 
             int target_width = num_str_len;
+            if (!variable_output_width)
+                target_width = 4;
             fixNumberCustomWidth(strp, target_width);
 
             for (int i = 0; i < target_width; i++)
             {
+                // aggiungo 0 all'inizio per avere lunghezza desiderata
                 if (i < target_width - num_str_len)
                     *strp++ = '0';
                 else
@@ -61,6 +84,12 @@ int main(void)
     fclose(inFile);
     fclose(outFile);
 
+    if (argc > 3)
+    {
+        free(inputFileStr);
+        free(outputFileStr);
+    }
+
     puts("DONE");
     printf("first address: $%X\n", first_address);
     printf("last address:  $%X\n", counting_index - 1);
@@ -68,16 +97,6 @@ int main(void)
     getchar();
 
     return 0;
-}
-
-void fixNumberWidth(char *p)
-{
-    int count = 0;
-    while (isxdigit(p[count]))
-        count++;
-
-    if (count < 4)
-        memmove(p + (4 - count), p, strlen(p) + 1);
 }
 
 void fixNumberCustomWidth(char *p, int n)
