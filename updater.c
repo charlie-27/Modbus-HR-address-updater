@@ -2,7 +2,6 @@
 #include <string.h>
 #include <stdbool.h>
 #include <ctype.h>
-#include <stdlib.h>
 
 #define MAX_LINE_LEN 200
 
@@ -10,26 +9,20 @@ bool notCommented(const char *);
 void fixNumberCustomWidth(char *, int);
 
 const char *const MATCH_STRING = "R_addr=$";
-char *inputFileStr = "in.txt";
-char *outputFileStr = "out.txt";
+const char *const inputFileStr = "in.txt";
+const char *const outputFileStr = "out.txt";
 
 int main(int argc, char **argv)
 {
     bool variable_output_width = false;
+
     if (argc > 1)
     {
-        if (!strcmp(argv[1], "v"))
+        if (!strcmp(argv[1], "-v"))
         {
             variable_output_width = true;
             puts("variable output address width!");
         }
-    }
-    if (argc > 3)
-    {
-        inputFileStr = calloc(strlen(argv[2]) + 1, sizeof(char));
-        strcpy(inputFileStr, argv[2]);
-        outputFileStr = calloc(strlen(argv[3]) + 1, sizeof(char));
-        strcpy(outputFileStr, argv[3]);
     }
 
     const int MATCH_STRING_LEN = strlen(MATCH_STRING);
@@ -83,12 +76,6 @@ int main(int argc, char **argv)
 
     fclose(inFile);
     fclose(outFile);
-
-    if (argc > 3)
-    {
-        free(inputFileStr);
-        free(outputFileStr);
-    }
 
     puts("DONE");
     printf("first address: $%X\n", first_address);
