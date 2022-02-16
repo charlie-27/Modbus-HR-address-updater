@@ -27,10 +27,9 @@ int main(void)
     int counting_index = 0x601;
     char line[MAX_LINE_LEN];
     if (scanf("%x", &counting_index) == 0)
-        scanf("%s",line);
+        scanf("%s", line);
     getchar();
     const int first_address = counting_index;
-
 
     while (fgets(line, sizeof line, inFile))
     {
@@ -44,14 +43,15 @@ int main(void)
             // aggiungo 0 all'inizio per avere lunghezza 4
             strp += MATCH_STRING_LEN;
 
-            fixNumberWidth(strp);
+            int target_width = num_str_len;
+            fixNumberCustomWidth(strp, target_width);
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < target_width; i++)
             {
-                if (i < 4 - num_str_len)
+                if (i < target_width - num_str_len)
                     *strp++ = '0';
                 else
-                    *strp++ = num_str[i + num_str_len - 4];
+                    *strp++ = num_str[i + num_str_len - target_width];
             }
         }
 
@@ -78,6 +78,21 @@ void fixNumberWidth(char *p)
 
     if (count < 4)
         memmove(p + (4 - count), p, strlen(p) + 1);
+}
+
+void fixNumberCustomWidth(char *p, int n)
+{
+    int count = 0;
+    while (isxdigit(p[count]))
+        count++;
+
+    if (count == n)
+        return;
+
+    if (count < n)
+        memmove(p + n - count, p, strlen(p) + 1);
+    else
+        memmove(p, p + count - n, strlen(p + count - n) + 1);
 }
 
 bool notCommented(const char *inputstr)

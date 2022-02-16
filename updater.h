@@ -2,3 +2,4 @@
 
 bool notCommented(const char *);
 void fixNumberWidth(char *);
+void fixNumberCustomWidth(char *,int);
