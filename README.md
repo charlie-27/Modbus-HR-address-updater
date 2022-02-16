@@ -6,3 +6,5 @@ Il programma cerca la stringa `R_addr=$` e ne modifica il valore successivo.
 * output file: `out.txt`
 
 Il programma richiede all'utente l'indirizzo esadecimale da cui partire.
+
+Le linee che iniziano con `(*` sono considerate commenti e non vengono modificate.
