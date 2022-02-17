@@ -80,7 +80,7 @@ int main(int argc, char **argv)
     puts("DONE");
     printf("first address: $%X\n", first_address);
     printf("last address:  $%X\n", counting_index - 1);
-    printf("total: %X\n", counting_index - first_address);
+    printf("total: %d\n", counting_index - first_address);
     getchar();
 
     return 0;
